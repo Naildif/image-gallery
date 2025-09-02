@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Project 2</title>
+  <link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css">
+  <style type="text/css">
+    body {
+      font-family: David Libre;
+      padding: 20px;
+      font-size: 16px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+
+    .photo {
+      position: relative;
+      border: 1px solid #ccc;
+    }
+
+    .photo img {
+      width: 100%;
+      display: block;
+    }
+
+    .favorite-button {
+      background: none;
+      border: none;
+      color: #f9dddd;
+      font-size: 24px;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+
+    .favorite-button.active {
+      color: rgb(237, 20, 237);
+    }
+
+    .no-photos {
+      text-align: center;
+      color: #999;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+  </style>
+  <script src="https://unpkg.com/vue@3.4.0"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h1>◦•●◉✿ 𝑹𝒊𝒉𝒂𝒏𝒏𝒂 𝑰𝒎𝒂𝒈𝒆 𝑮𝒂𝒍𝒍𝒆𝒓𝒚 ✿◉●•◦</h1>
+    <form @submit.prevent="addPhoto">
+      <input placeholder="Enter Rihanna image URL"
+        v-model="newPhotoUrl" />
+      <button type="submit">✿.｡𝙰𝚍𝚍 𝚁𝚒𝚑𝚊𝚗𝚗𝚊 𝚒𝚖𝚊𝚐𝚎｡.✿</button>
+    </form>
+
+    <p class="no-photos" v-if="photos.length== 0">No photos added yet. Add some!</p>
+
+    <div class="gallery" v-else>
+      <div class="photo" v-for="(photo, index) in photos" :key="photo.id">
+        <img :src="photo.url" @click="removePhoto(index)" />
+        <button class="favorite-button" @click="toggleFavorite(photo)" :class="{'active': photo.isFavorite }">
+          ♥
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+    const App = {
+      setup() {
+        const photos = ref([]);
+        const newPhotoUrl = ref('');
+        const addPhoto = (e) => {
+          console.log('clicks');
+
+          const photo = {
+            id: photos.value.length + 1,
+            url: newPhotoUrl.value,
+            isFavorite: false,
+          };
+          if (newPhotoUrl.value!== '') {
+            photos.value.push(photo);
+            newPhotoUrl.value = '';
+          }
+        };
+        const toggleFavorite = (photo) => {
+            console.log(photo);
+          photo.isFavorite = !photo.isFavorite;
+          console.log(photo);
+        };
+        const removePhoto = (index) => {
+            photos.value.splice(index, 1);
+        };
+
+        return {
+            addPhoto,
+            photos, 
+            newPhotoUrl,
+            toggleFavorite,
+            removePhoto
+        }
+      },
+    };
+    createApp(App).mount('#app');
+  </script>
+</body>
+
+</html>
